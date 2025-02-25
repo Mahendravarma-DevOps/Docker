@@ -1,64 +1,74 @@
-Laravel + Nginx + MySQL in a Docker Container
+# Laravel + Nginx + MySQL in a  Docker Container
 
-This project sets up a Laravel application inside a single Docker container with Nginx, PHP-FPM, and MySQL using Supervisor to manage multiple services.
+This project sets up a Laravel application inside a single Docker container with **Nginx, PHP-FPM, and MySQL** using **Supervisor** to manage multiple services.
 
-🚀 Features
+---
 
-Ubuntu 24.04 as the base image
+## 🚀 Features
 
-Nginx as the web server
+- Ubuntu 24.04 as the base image
+- Nginx as the web server
+- PHP 8.2 with required extensions
+- MySQL (MariaDB) database inside the same container
+- Supervisor for managing multiple services
+- Automatic Laravel setup (Composer install, NPM install, migrations, etc.)
 
-PHP 8.2 with required extensions
+---
 
-MySQL (MariaDB) database inside the same container
+## 📁 Folder Structure
 
-Supervisor for managing multiple services
-
-Automatic Laravel setup (Composer install, NPM install, migrations, etc.)
-
-📁 Folder Structure
-
+```
 php-docker-project/
 │── Dockerfile
 │── nginx.conf
 │── supervisord.conf
 │── .env (Custom Laravel environment file)
 │── app/  (Laravel Project)
+```
 
-🛠️ Setup & Installation
+---
 
-1️⃣ Clone this repository
+## 🛠️ Setup & Installation
 
+### **1️⃣ Clone this repository**
+
+```sh
 git clone https://github.com/yourusername/php-docker-project.git
 cd php-docker-project
+```
 
-2️⃣ Build the Docker image
+### **2️⃣ Build the Docker image**
 
+```sh
 docker build -t php-nginx-mysql .
+```
 
-3️⃣ Run the container
+### **3️⃣ Run the container**
 
+```sh
 docker run -d -p 80:80 --name php_server php-nginx-mysql
+```
 
-4️⃣ Verify the setup
+### **4️⃣ Verify the setup**
 
-Visit http://localhost to see your Laravel app running.
+- Visit [**http://localhost**](http://localhost) to see your Laravel app running.
+- Check running processes:
+  ```sh
+  docker exec -it php_server supervisorctl status
+  ```
 
-Check running processes:
+---
 
-docker exec -it php_server supervisorctl status
-
-🔧 Dockerfile Overview
+## 🔧 Dockerfile Overview
 
 This Dockerfile:
 
-Installs Nginx, PHP, MySQL, and required extensions.
+- Installs Nginx, PHP, MySQL, and required extensions.
+- Installs Laravel dependencies (Composer & NPM packages).
+- Sets up Laravel environment, runs migrations & seeds database.
+- Uses Supervisor to manage Nginx, PHP-FPM, and MySQL processes.
 
-Installs Laravel dependencies (Composer & NPM packages).
-
-Sets up Laravel environment, runs migrations & seeds database.
-
-Uses Supervisor to manage Nginx, PHP-FPM, and MySQL processes.
+```dockerfile
 
 # Install required packages
 RUN apt update && apt install -y \
@@ -82,15 +92,21 @@ RUN composer install && npm install && npm run build
 RUN cp .env.example .env && php artisan key:generate
 RUN touch ./database/database.sqlite && chmod 666 ./database/database.sqlite
 RUN php artisan migrate --seed
+```
 
-🔄 Stopping & Removing the Container
+---
 
+## 🔄 Stopping & Removing the Container
+
+```sh
 docker stop php_server
 docker rm php_server
 docker rmi php-nginx-mysql
+```
 
-📜 License
+---
+
+## 📜 License
 
 This project is open-source under the MIT License.
-
 
