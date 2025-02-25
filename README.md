@@ -46,7 +46,7 @@ docker build -t php-nginx-mysql .
 ### **3️⃣ Run the container**
 
 ```sh
-docker run -d -p 80:80 --name php_server php-nginx-mysql
+docker run -d -p 80:80 3306:3306 --name php_server php-nginx-mysql
 ```
 
 ### **4️⃣ Verify the setup**
